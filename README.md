@@ -15,5 +15,8 @@
     Start the server in a console with mvn spring-boot:run
 
 ## OpenApi documentation
-    - http://localhost:8080/swagger-ui/index.html
+    http://localhost:8080/swagger-ui/index.html
+
+## Tests
+    There are limited number of unit tests mostly for successful scenarios
 
