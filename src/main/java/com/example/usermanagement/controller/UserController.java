@@ -2,6 +2,7 @@ package com.example.usermanagement.controller;
 
 import com.example.usermanagement.model.dto.UserDTO;
 import com.example.usermanagement.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -21,21 +22,25 @@ public class UserController {
     }
 
     @GetMapping("/users")
+    @Operation(summary = "Get all users.")
     List<UserDTO> all() {
         return userService.findAll();
     }
 
     @GetMapping("/users/{id}")
+    @Operation(summary = "Find user by id.")
     UserDTO one(@PathVariable String id) {
         return userService.findOne(id);
     }
 
     @PostMapping("/users")
+    @Operation(summary = "Create user.")
     UserDTO newUser(@RequestBody UserDTO newUser) {
         return userService.save(newUser);
     }
 
     @PutMapping("/users/{id}")
+    @Operation(summary = "Update user.", description = "Will overwrite lastLogin.")
     UserDTO updateUser(@RequestBody UserDTO updateUser, @PathVariable String id) {
         if (!StringUtils.hasText(updateUser.getId())) {
             updateUser.setId(id);
@@ -46,6 +51,7 @@ public class UserController {
     }
 
     @DeleteMapping("/users/{id}")
+    @Operation(summary = "Delete user by id")
     Long delete(@PathVariable String id) {
         return userService.delete(id);
     }

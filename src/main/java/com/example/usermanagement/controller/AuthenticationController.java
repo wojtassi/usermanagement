@@ -3,6 +3,7 @@ package com.example.usermanagement.controller;
 import com.example.usermanagement.model.LoginResponse;
 import com.example.usermanagement.model.dto.LoginDTO;
 import com.example.usermanagement.service.LoginService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ public class AuthenticationController {
         this.loginService = loginService;
     }
     @PostMapping("/login")
+    @Operation(summary = "Verify email and password match user.")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginDTO loginDTO) {
        if (!loginService.checkLogin(loginDTO)) {
            LoginResponse resp = LoginResponse.builder()
