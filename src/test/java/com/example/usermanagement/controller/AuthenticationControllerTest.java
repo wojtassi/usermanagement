@@ -66,7 +66,7 @@ public class AuthenticationControllerTest {
     @Test
     public void testLoginFailureWrongPassword() throws Exception {
         User user = User.builder().id(new ObjectId("67a21b808cf1401b9b1af3b9")).name("somename").password("password1").email("email@email.com").lastLogin(new Date(1738684697117L)).build();
-        when(userRepository.findOneByEmail("wrong@email.com")).thenReturn(user);
+        when(userRepository.findOneByEmail("email@email.com")).thenReturn(user);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/v1/login").contentType(MediaType.APPLICATION_JSON).content("{\n" +
                                 "    \"email\": \"email@email.com\",\n" +
