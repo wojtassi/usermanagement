@@ -67,7 +67,7 @@ public class UserControllerTest {
     @Test
     public void testGetOneUser() throws Exception {
         User user1 = User.builder().id(new ObjectId("67a21b808cf1401b9b1af3b9")).name("user1").password("password1").email("email1@email.com").lastLogin(new Date(1738684697117L)).build();
-        UserDTO userDTO1 = UserDTO.builder().id("67a21b808cf1401b9b1af3b9").name("user1").password("password1").email("email1@email.com").lastLogin(new Date(1738684697117L)).build();
+        UserDTO userDTO1 = UserDTO.builder().id("67a21b808cf1401b9b1af3b9").name("user1").password("*******").email("email1@email.com").lastLogin(new Date(1738684697117L)).build();
 
         when(userRepository.findOne(anyString())).thenReturn(user1);
         String resultJSON = mapper.writeValueAsString(userDTO1);
@@ -84,34 +84,40 @@ public class UserControllerTest {
     @Test
     public void testCreateUser() throws Exception {
         User user1 = User.builder().id(new ObjectId("67a21b808cf1401b9b1af3b9")).name("user1").password("password1").email("email1@email.com").build();
+        User user1Encrypted = User.builder().id(new ObjectId("67a21b808cf1401b9b1af3b9")).name("user1").password("0b14d501a594442a01c6859541bcb3e8164d183d32937b851835442f69d5c94e").email("email1@email.com").build();
         UserDTO userDTO1 = UserDTO.builder().id("67a21b808cf1401b9b1af3b9").name("user1").password("password1").email("email1@email.com").build();
+        UserDTO userDTOResult = UserDTO.builder().id("67a21b808cf1401b9b1af3b9").name("user1").password("*******").email("email1@email.com").build();
 
         when(userRepository.save(any(User.class))).thenReturn(user1);
         String userJSON = mapper.writeValueAsString(userDTO1);
+        String userJSONResult = mapper.writeValueAsString(userDTOResult);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/v1/users").contentType(MediaType.APPLICATION_JSON).content(userJSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(userJSON));
-        verify(userRepository).save(eq(user1));
+                .andExpect(content().json(userJSONResult));
+        verify(userRepository).save(eq(user1Encrypted));
         verifyNoMoreInteractions(userRepository);
     }
 
     @Test
     public void testUpdateUser() throws Exception {
         User user1 = User.builder().id(new ObjectId("67a21b808cf1401b9b1af3b9")).name("user1").password("password1").email("email1@email.com").build();
+        User user1Encrypted = User.builder().id(new ObjectId("67a21b808cf1401b9b1af3b9")).name("user1").password("0b14d501a594442a01c6859541bcb3e8164d183d32937b851835442f69d5c94e").email("email1@email.com").build();
         UserDTO userDTO1 = UserDTO.builder().id("67a21b808cf1401b9b1af3b9").name("user1").password("password1").email("email1@email.com").build();
+        UserDTO userDTOResult = UserDTO.builder().id("67a21b808cf1401b9b1af3b9").name("user1").password("*******").email("email1@email.com").build();
 
         when(userRepository.update(any(User.class))).thenReturn(user1);
         String userJSON = mapper.writeValueAsString(userDTO1);
+        String userJSONResult = mapper.writeValueAsString(userDTOResult);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/v1/users/67a21b808cf1401b9b1af3b9").contentType(MediaType.APPLICATION_JSON).content(userJSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(content().json(userJSON));
-        verify(userRepository).update(eq(user1));
+                .andExpect(content().json(userJSONResult));
+        verify(userRepository).update(eq(user1Encrypted));
         verifyNoMoreInteractions(userRepository);
     }
 

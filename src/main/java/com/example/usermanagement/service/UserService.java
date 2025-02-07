@@ -1,8 +1,10 @@
 package com.example.usermanagement.service;
 
+import com.example.usermanagement.model.User;
 import com.example.usermanagement.model.dto.UserDTO;
 import com.example.usermanagement.model.mapper.Mapper;
 import com.example.usermanagement.repository.UserRepository;
+import com.example.usermanagement.util.PasswordEncryptor;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
@@ -11,13 +13,19 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncryptor passwordEncryptor;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncryptor passwordEncryptor) {
         this.userRepository = userRepository;
+        this.passwordEncryptor = passwordEncryptor;
     }
 
     public UserDTO save(UserDTO userDTO) {
-        return Mapper.toDto(userRepository.save(Mapper.toUser(userDTO)));
+        User user = Mapper.toUser(userDTO);
+        user.setPassword(passwordEncryptor.encryptPassword(user.getPassword()));
+        user = userRepository.save(user);
+        user.setPassword("*******");
+        return Mapper.toDto(user);
     }
 
     public List<UserDTO> findAll() {
@@ -25,7 +33,9 @@ public class UserService {
     }
 
     public UserDTO findOne(String id) {
-        return Mapper.toDto(userRepository.findOne(id));
+        User user = userRepository.findOne(id);
+        user.setPassword("*******");
+        return Mapper.toDto(user);
     }
 
     public long delete(String id) {
@@ -33,6 +43,10 @@ public class UserService {
     }
 
     public UserDTO update(UserDTO userDTO) {
-        return Mapper.toDto(userRepository.update(Mapper.toUser(userDTO)));
+        User user = Mapper.toUser(userDTO);
+        user.setPassword(passwordEncryptor.encryptPassword(user.getPassword()));
+        user = userRepository.update(user);
+        user.setPassword("*******");
+        return Mapper.toDto(user);
     }
 }

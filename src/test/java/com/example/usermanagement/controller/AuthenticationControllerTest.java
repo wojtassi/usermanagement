@@ -31,7 +31,7 @@ public class AuthenticationControllerTest {
 
     @Test
     public void testLoginSuccess() throws Exception {
-        User user = User.builder().id(new ObjectId("67a21b808cf1401b9b1af3b9")).name("somename").password("password1").email("email@email.com").lastLogin(new Date(1738684697117L)).build();
+        User user = User.builder().id(new ObjectId("67a21b808cf1401b9b1af3b9")).name("somename").password("0b14d501a594442a01c6859541bcb3e8164d183d32937b851835442f69d5c94e").email("email@email.com").lastLogin(new Date(1738684697117L)).build();
         when(userRepository.findOneByEmail("email@email.com")).thenReturn(user);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/v1/login").contentType(MediaType.APPLICATION_JSON).content("{\n" +
@@ -65,7 +65,7 @@ public class AuthenticationControllerTest {
 
     @Test
     public void testLoginFailureWrongPassword() throws Exception {
-        User user = User.builder().id(new ObjectId("67a21b808cf1401b9b1af3b9")).name("somename").password("password1").email("email@email.com").lastLogin(new Date(1738684697117L)).build();
+        User user = User.builder().id(new ObjectId("67a21b808cf1401b9b1af3b9")).name("somename").password("eb0f08df4490a936686900f130b51868a6f7a9ae73ac4fd4386660b2c3003a48").email("email@email.com").lastLogin(new Date(1738684697117L)).build();
         when(userRepository.findOneByEmail("email@email.com")).thenReturn(user);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/v1/login").contentType(MediaType.APPLICATION_JSON).content("{\n" +
